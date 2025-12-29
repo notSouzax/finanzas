@@ -468,8 +468,16 @@ function renderCategoriesSummary() {
             e.stopPropagation();
         });
         toggle.addEventListener('change', async (e) => {
+            e.stopPropagation(); // Prevent category detail from opening
             const catId = e.target.closest('.category-card').dataset.id;
             await togglePayment(catId, e.target.checked);
+        });
+    });
+
+    // Prevent toggle container from opening category detail
+    elements.categoriesSummary.querySelectorAll('.toggle-container').forEach(container => {
+        container.addEventListener('click', (e) => {
+            e.stopPropagation();
         });
     });
 }
