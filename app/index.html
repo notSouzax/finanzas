@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+        name="viewport" />
+    <title>Control de Finanzas</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="savings_styles.css">
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDrm5MHyG85YsEK0-Z3KQARBwaROk8v4A",
+            authDomain: "gestion-de-gastos-6ba09.firebaseapp.com",
+            projectId: "gestion-de-gastos-6ba09",
+            storageBucket: "gestion-de-gastos-6ba09.firebasestorage.app",
+            messagingSenderId: "470162223128",
+            appId: "1:470162223128:web:316a8de988a066ae26136d",
+            measurementId: "G-P281K8L2VQ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Make Firebase available globally
+        window.db = db;
+        window.firestore = { collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, where, orderBy };
+
+        // Set flag that Firebase is ready (for scripts that load later)
+        window.firebaseReady = true;
+
+        // Signal that Firebase is ready (for scripts that loaded first)
+        window.dispatchEvent(new Event('firebase-ready'));
+    </script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- iOS PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#102216">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- App Container -->
+    <div id="app" class="app-container">
+
+        <!-- Header -->
+        <header class="header" id="header">
+            <div class="header-left">
+                <div class="avatar"></div>
+                <div class="header-greeting">
+                    <p class="greeting-text">Bienvenido</p>
+                    <h2 class="greeting-name">Control de Finanzas</h2>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn" id="btn-view-incomes" title="Ver ingresos extra">
+                    <span class="material-symbols-outlined">savings</span>
+                </button>
+                <button class="icon-btn" id="btn-view-extra-expenses-header" title="Ver gastos extra">
+                    <span class="material-symbols-outlined">receipt_long</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Month Selector -->
+        <div class="month-selector" id="month-selector">
+            <button class="month-nav" id="prev-month">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <div class="month-display" id="current-month">Diciembre 2024</div>
+            <button class="month-nav" id="next-month">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+
+            <!-- Dashboard View -->
+            <section class="view active" id="view-dashboard">
+                <!-- Balance Card -->
+                <div class="balance-card">
+                    <div class="balance-card-bg"></div>
+                    <div class="balance-content">
+                        <div class="balance-top">
+                            <div class="balance-info">
+                                <p class="balance-label">Presupuesto Total</p>
+                                <h1 class="balance-amount" id="total-budget">0,00€</h1>
+                            </div>
+                            <div class="balance-trend positive">
+                                <span class="material-symbols-outlined">trending_up</span>
+                                <span id="balance-percent">0%</span>
+                            </div>
+                        </div>
+                        <div class="balance-divider"></div>
+                        <div class="balance-bottom">
+                            <div class="balance-spent">
+                                <span class="label">Gastado:</span>
+                                <span class="amount" id="total-spent">0,00€</span>
+                            </div>
+                            <div class="balance-remaining">
+                                <span class="label">Disponible:</span>
+                                <span class="amount" id="total-remaining">0,00€</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon paid">
+                            <span class="material-symbols-outlined">check_circle</span>
+                        </div>
+                        <div class="stat-info">
+                            <p class="stat-label">Pagados</p>
+                            <p class="stat-value" id="count-paid">0 / 0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon pending">
+                            <span class="material-symbols-outlined">schedule</span>
+                        </div>
+                        <div class="stat-info">
+                            <p class="stat-label">Pendientes</p>
+                            <p class="stat-value" id="count-pending">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories Summary -->
+                <div class="section">
+                    <div class="section-header">
+                        <h3 class="section-title">Categorías</h3>
+                        <button class="text-btn" id="btn-view-all">Ver todo</button>
+                    </div>
+                    <div class="categories-list" id="categories-summary">
+                        <!-- Categories will be rendered here -->
+                        <div class="empty-state" id="empty-categories">
+                            <span class="material-symbols-outlined">folder_open</span>
+                            <p>No hay categorías</p>
+                            <button class="btn-primary btn-small" id="btn-add-first-category">
+                                <span class="material-symbols-outlined">add</span>
+                                Añadir categoría
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Savings View -->
+            <section class="view" id="view-savings">
+                <div class="savings-summary-card">
+                    <div class="savings-summary-bg"></div>
+                    <div class="savings-summary-content">
+                        <p class="savings-label">Ahorro Mensual Total</p>
+                        <h2 class="savings-amount" id="savings-total">0,00€</h2>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <h3 class="section-title">Metas de Ahorro</h3>
+                        <button class="btn-primary btn-small" id="btn-add-savings-goal">
+                            <span class="material-symbols-outlined">add</span>
+                            Añadir meta
+                        </button>
+                    </div>
+                    <div class="savings-list" id="savings-goals-list">
+                        <!-- Savings goals will be rendered here -->
+                        <div class="empty-state" id="empty-savings">
+                            <span class="material-symbols-outlined">savings</span>
+                            <p>No hay metas de ahorro este mes</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Category Detail View -->
+            <section class="view" id="view-category-detail">
+                <div class="detail-header" id="detail-header">
+                    <!-- Category detail header will be rendered here -->
+                </div>
+                <div class="detail-content" id="detail-content">
+                    <!-- Category detail content will be rendered here -->
+                </div>
+            </section>
+
+            <!-- Profile View -->
+            <section class="view" id="view-profile">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <span class="material-symbols-outlined">person</span>
+                    </div>
+                    <h2 class="profile-name">Mi Perfil</h2>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Ingresos</h3>
+                    <div class="profile-card">
+                        <div class="profile-item">
+                            <span class="material-symbols-outlined">account_balance_wallet</span>
+                            <div class="profile-item-content">
+                                <span class="profile-item-label">Ingreso Mensual Fijo</span>
+                                <span class="profile-item-value" id="profile-monthly-income">0,00€</span>
+                            </div>
+                            <button class="icon-btn" id="btn-edit-income">
+                                <span class="material-symbols-outlined">edit</span>
+                            </button>
+                        </div>
+                        <div class="profile-item">
+                            <span class="material-symbols-outlined">savings</span>
+                            <div class="profile-item-content">
+                                <span class="profile-item-label">Ingresos Extra (este mes)</span>
+                                <span class="profile-item-value" id="profile-extra-income">0,00€</span>
+                            </div>
+                        </div>
+                        <div class="profile-item">
+                            <span class="material-symbols-outlined">receipt_long</span>
+                            <div class="profile-item-content">
+                                <span class="profile-item-label">Gastos Extra (este mes)</span>
+                                <span class="profile-item-value" id="profile-extra-expenses-total">0,00€</span>
+                            </div>
+                            <button class="icon-btn" id="btn-view-extra-expenses">
+                                <span class="material-symbols-outlined">visibility</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Resumen del Mes</h3>
+                    <div class="profile-card">
+                        <div class="profile-item">
+                            <span class="material-symbols-outlined">arrow_downward</span>
+                            <div class="profile-item-content">
+                                <span class="profile-item-label">Total Ingresos</span>
+                                <span class="profile-item-value income" id="profile-total-income">0,00€</span>
+                            </div>
+                        </div>
+                        <div class="profile-item">
+                            <span class="material-symbols-outlined">arrow_upward</span>
+                            <div class="profile-item-content">
+                                <span class="profile-item-label">Total Gastos</span>
+                                <span class="profile-item-value expense" id="profile-total-expenses">0,00€</span>
+                            </div>
+                        </div>
+                        <div class="profile-item">
+                            <span class="material-symbols-outlined">account_balance</span>
+                            <div class="profile-item-content">
+                                <span class="profile-item-label">Balance</span>
+                                <span class="profile-item-value" id="profile-balance">0,00€</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats View -->
+            <section id="view-stats" class="view">
+                <div class="section" style="padding-top: 20px;">
+                    <h2 class="section-title">Estadísticas del Mes</h2>
+                </div>
+
+                <!-- Weekly Spending Chart -->
+                <div class="section">
+                    <div class="stats-card">
+                        <h3 class="stats-card-title">Gastos Semanales</h3>
+                        <div class="chart-container">
+                            <canvas id="weekly-chart"></canvas>
+                        </div>
+                        <div class="stats-metrics">
+                            <div class="stat-item">
+                                <span class="stat-label">Media Diaria</span>
+                                <span class="stat-value" id="avg-daily">0,00€</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Media Semanal</span>
+                                <span class="stat-value" id="avg-weekly">0,00€</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Distribution Chart -->
+                <div class="section">
+                    <div class="stats-card">
+                        <h3 class="stats-card-title">Distribución por Categorías Variables</h3>
+                        <div class="chart-container chart-container-donut">
+                            <canvas id="category-chart"></canvas>
+                        </div>
+                        <div id="category-legend" class="category-legend"></div>
+                    </div>
+                </div>
+
+                <!-- Category Averages -->
+                <div class="section">
+                    <h3 class="section-title">Media por Categoría</h3>
+                    <div id="category-averages" class="category-averages-list"></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-view="dashboard">
+                <span class="material-symbols-outlined filled">home</span>
+                <span class="nav-label">Inicio</span>
+            </button>
+            <button class="nav-item" data-view="savings">
+                <span class="material-symbols-outlined">savings</span>
+                <span class="nav-label">Ahorros</span>
+            </button>
+            <button class="nav-item fab" id="btn-add">
+                <span class="material-symbols-outlined">add</span>
+            </button>
+            <button class="nav-item" data-view="stats">
+                <span class="material-symbols-outlined">bar_chart</span>
+                <span class="nav-label">Stats</span>
+            </button>
+            <button class="nav-item" id="nav-profile">
+                <span class="material-symbols-outlined">person</span>
+                <span class="nav-label">Perfil</span>
+            </button>
+        </nav>
+
+        <div class="fab-menu hidden" id="fab-menu">
+            <div class="fab-backdrop"></div>
+            <div class="fab-options">
+                <button class="fab-option" id="fab-add-income">
+                    <span class="material-symbols-outlined">savings</span>
+                    <span>Añadir Ingreso</span>
+                </button>
+                <button class="fab-option" id="fab-add-extra-expense">
+                    <span class="material-symbols-outlined">receipt_long</span>
+                    <span>Gasto Extra</span>
+                </button>
+                <button class="fab-option" id="fab-add-expense">
+                    <span class="material-symbols-outlined">payments</span>
+                    <span>Añadir Gasto</span>
+                </button>
+                <button class="fab-option" id="fab-add-category">
+                    <span class="material-symbols-outlined">create_new_folder</span>
+                    <span>Nueva Categoría</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal: Add/Edit Category -->
+        <div class="modal hidden" id="modal-category">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modal-category-title">Nueva Categoría</h3>
+                    <button class="icon-btn modal-close">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <form class="modal-body" id="form-category">
+                    <input type="hidden" id="category-id" value="">
+
+                    <div class="form-group">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-input" id="category-name"
+                            placeholder="Ej: Netflix, Coche, Comida..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Importe mensual (€)</label>
+                        <input type="number" class="form-input" id="category-amount" placeholder="0.00" step="0.01"
+                            min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tipo de gasto</label>
+                        <div class="type-selector">
+                            <label class="type-option">
+                                <input type="radio" name="category-type" value="fixed" checked>
+                                <div class="type-card">
+                                    <span class="material-symbols-outlined">check_circle</span>
+                                    <span class="type-name">Fijo</span>
+                                    <span class="type-desc">Marcar pagado</span>
+                                </div>
+                            </label>
+                            <label class="type-option">
+                                <input type="radio" name="category-type" value="variable">
+                                <div class="type-card">
+                                    <span class="material-symbols-outlined">calculate</span>
+                                    <span class="type-name">Variable</span>
+                                    <span class="type-desc">Límite mensual</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Icono</label>
+                        <div class="icon-selector" id="icon-selector">
+                            <button type="button" class="icon-option selected" data-icon="shopping_cart"><span
+                                    class="material-symbols-outlined">shopping_cart</span></button>
+                            <button type="button" class="icon-option" data-icon="directions_car"><span
+                                    class="material-symbols-outlined">directions_car</span></button>
+                            <button type="button" class="icon-option" data-icon="smartphone"><span
+                                    class="material-symbols-outlined">smartphone</span></button>
+                            <button type="button" class="icon-option" data-icon="school"><span
+                                    class="material-symbols-outlined">school</span></button>
+                            <button type="button" class="icon-option" data-icon="restaurant"><span
+                                    class="material-symbols-outlined">restaurant</span></button>
+                            <button type="button" class="icon-option" data-icon="movie"><span
+                                    class="material-symbols-outlined">movie</span></button>
+                            <button type="button" class="icon-option" data-icon="sports_esports"><span
+                                    class="material-symbols-outlined">sports_esports</span></button>
+                            <button type="button" class="icon-option" data-icon="fitness_center"><span
+                                    class="material-symbols-outlined">fitness_center</span></button>
+                            <button type="button" class="icon-option" data-icon="home"><span
+                                    class="material-symbols-outlined">home</span></button>
+                            <button type="button" class="icon-option" data-icon="bolt"><span
+                                    class="material-symbols-outlined">bolt</span></button>
+                            <button type="button" class="icon-option" data-icon="water_drop"><span
+                                    class="material-symbols-outlined">water_drop</span></button>
+                            <button type="button" class="icon-option" data-icon="local_gas_station"><span
+                                    class="material-symbols-outlined">local_gas_station</span></button>
+                            <button type="button" class="icon-option" data-icon="wifi"><span
+                                    class="material-symbols-outlined">wifi</span></button>
+                            <button type="button" class="icon-option" data-icon="subscriptions"><span
+                                    class="material-symbols-outlined">subscriptions</span></button>
+                            <button type="button" class="icon-option" data-icon="savings"><span
+                                    class="material-symbols-outlined">savings</span></button>
+                            <button type="button" class="icon-option" data-icon="pets"><span
+                                    class="material-symbols-outlined">pets</span></button>
+                            <button type="button" class="icon-option" data-icon="checkroom"><span
+                                    class="material-symbols-outlined">checkroom</span></button>
+                            <button type="button" class="icon-option" data-icon="local_hospital"><span
+                                    class="material-symbols-outlined">local_hospital</span></button>
+                        </div>
+                        <input type="hidden" id="category-icon" value="shopping_cart">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Color</label>
+                        <div class="color-selector" id="color-selector">
+                            <button type="button" class="color-option selected" data-color="#13ec5b"
+                                style="background:#13ec5b"></button>
+                            <button type="button" class="color-option" data-color="#4ECDC4"
+                                style="background:#4ECDC4"></button>
+                            <button type="button" class="color-option" data-color="#FF6B6B"
+                                style="background:#FF6B6B"></button>
+                            <button type="button" class="color-option" data-color="#FFD93D"
+                                style="background:#FFD93D"></button>
+                            <button type="button" class="color-option" data-color="#6C5CE7"
+                                style="background:#6C5CE7"></button>
+                            <button type="button" class="color-option" data-color="#A8E6CF"
+                                style="background:#A8E6CF"></button>
+                            <button type="button" class="color-option" data-color="#FF8C42"
+                                style="background:#FF8C42"></button>
+                            <button type="button" class="color-option" data-color="#98D8C8"
+                                style="background:#98D8C8"></button>
+                        </div>
+                        <input type="hidden" id="category-color" value="#13ec5b">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary modal-close">Cancelar</button>
+                        <button type="submit" class="btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal: Add Expense -->
+        <div class="modal hidden" id="modal-expense">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Añadir Gasto</h3>
+                    <button class="icon-btn modal-close">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <form class="modal-body" id="form-expense">
+                    <div class="form-group">
+                        <label class="form-label">Categoría</label>
+                        <select class="form-input" id="expense-category" required>
+                            <option value="">Selecciona categoría...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Descripción</label>
+                        <input type="text" class="form-input" id="expense-description"
+                            placeholder="Ej: Supermercado, Café...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Importe (€)</label>
+                        <input type="number" class="form-input" id="expense-amount" placeholder="0.00" step="0.01"
+                            min="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" class="form-input" id="expense-date" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary modal-close">Cancelar</button>
+                        <button type="submit" class="btn-primary">Añadir</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+        <!-- Modal: Edit Monthly Income -->
+        <div class="modal hidden" id="modal-monthly-income">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content modal-small">
+                <div class="modal-header">
+                    <h3 class="modal-title">Ingreso Mensual</h3>
+                    <button class="icon-btn modal-close">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <form class="modal-body" id="form-monthly-income">
+                    <div class="form-group">
+                        <label class="form-label">Tu ingreso mensual fijo (€)</label>
+                        <input type="number" class="form-input" id="monthly-income-amount" placeholder="0.00"
+                            step="0.01" min="0" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary modal-close">Cancelar</button>
+                        <button type="submit" class="btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal: Add Extra Income -->
+        <div class="modal hidden" id="modal-income">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Añadir Ingreso Extra</h3>
+                    <button class="icon-btn modal-close">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <form class="modal-body" id="form-income">
+                    <div class="form-group">
+                        <label class="form-label">Descripción</label>
+                        <input type="text" class="form-input" id="income-description"
+                            placeholder="Ej: Freelance, Regalo, Venta...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Importe (€)</label>
+                        <input type="number" class="form-input" id="income-amount" placeholder="0.00" step="0.01"
+                            min="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" class="form-input" id="income-date" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary modal-close">Cancelar</button>
+                        <button type="submit" class="btn-primary">Añadir</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal: Add Extra Expense -->
+        <div class="modal hidden" id="modal-extra-expense">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Gasto Extra</h3>
+                    <button class="icon-btn modal-close">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <form class="modal-body" id="form-extra-expense">
+                    <div class="form-group">
+                        <label class="form-label">Descripción</label>
+                        <input type="text" class="form-input" id="extra-expense-description"
+                            placeholder="Ej: Reparación coche, Regalo, Médico..." required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Importe (€)</label>
+                        <input type="number" class="form-input" id="extra-expense-amount" placeholder="0.00" step="0.01"
+                            min="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" class="form-input" id="extra-expense-date" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary modal-close">Cancelar</button>
+                        <button type="submit" class="btn-primary">Añadir</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal: View Incomes List -->
+        <div class="modal hidden" id="modal-incomes-list">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Ingresos Extra del Mes</h3>
+                    <button class="icon-btn modal-close">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="incomes-list-content">
+                    <!-- Content will be rendered by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: View Extra Expenses List -->
+        <div class="modal hidden" id="modal-extra-expenses-list">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Gastos Extra del Mes</h3>
+                    <button class="icon-btn modal-close">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="extra-expenses-list-content">
+                    <!-- Content will be rendered by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Add/Edit Savings Goal -->
+        <div class="modal hidden" id="modal-savings-goal">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modal-savings-title">Nueva Meta de Ahorro</h3>
+                    <button class="icon-btn modal-close">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <form class="modal-body" id="form-savings-goal">
+                    <input type="hidden" id="savings-goal-id" value="">
+
+                    <div class="form-group">
+                        <label class="form-label">Nombre de la meta</label>
+                        <input type="text" class="form-input" id="savings-name"
+                            placeholder="Ej: Viaje a Japón, Coche, Fondo Emergencia..." required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="form-label">Importe Mínimo (€)</label>
+                        <input type="number" class="form-input" id="savings-target" placeholder="0.00" step="0.01"
+                            min="0.01" required>
+                    </div>
+
+                    <!-- Importe Ahorrado removed -->
+                    <input type="hidden" id="savings-current" value="0">
+
+                    <div class="form-group">
+                        <label class="form-label">Color</label>
+                        <div class="color-selector" id="savings-color-selector">
+                            <button type="button" class="color-option selected" data-color="#13ec5b"
+                                style="background:#13ec5b"></button>
+                            <button type="button" class="color-option" data-color="#4ECDC4"
+                                style="background:#4ECDC4"></button>
+                            <button type="button" class="color-option" data-color="#FF6B6B"
+                                style="background:#FF6B6B"></button>
+                            <button type="button" class="color-option" data-color="#FFD93D"
+                                style="background:#FFD93D"></button>
+                            <button type="button" class="color-option" data-color="#6C5CE7"
+                                style="background:#6C5CE7"></button>
+                        </div>
+                        <input type="hidden" id="savings-color" value="#13ec5b">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary modal-close">Cancelar</button>
+                        <button type="submit" class="btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal: Add Savings Contribution -->
+        <div class="modal hidden" id="modal-savings-contribution">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content modal-small">
+                <div class="modal-header">
+                    <h3 class="modal-title">Añadir Aportación</h3>
+                    <button class="icon-btn modal-close">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <form class="modal-body" id="form-savings-contribution">
+                    <input type="hidden" id="contribution-goal-id" value="">
+                    <div class="form-group">
+                        <label class="form-label" id="contribution-goal-name">Meta: -</label>
+                        <input type="number" class="form-input" id="contribution-amount" placeholder="0.00" step="0.01"
+                            min="0.01" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary modal-close">Cancelar</button>
+                        <button type="submit" class="btn-primary">Añadir</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal: Confirm Delete (Moved to end) -->
+        <div class="modal hidden" id="modal-confirm">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content modal-small">
+                <div class="modal-header">
+                    <h3 class="modal-title">Confirmar</h3>
+                </div>
+                <div class="modal-body">
+                    <p id="confirm-message">¿Estás seguro?</p>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary modal-close">Cancelar</button>
+                    <button type="button" class="btn-danger" id="btn-confirm">Eliminar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toast-container"></div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loading">
+            <div class="loader"></div>
+        </div>
+    </div>
+
+    <script src="app.js" type="module"></script>
+</body>
+
+</html>

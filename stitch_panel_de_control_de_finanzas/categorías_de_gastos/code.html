@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Categorías de Gastos</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "primary-dark": "#0fb847",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-dark": "#1c2e22",
+                        "surface-dark-lighter": "#2a4232",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hide for clean mobile look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Smooth toggle transition */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #13ec5b;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #13ec5b;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark font-display text-white overflow-hidden">
+<!-- Mobile Container -->
+<div class="relative flex flex-col h-screen w-full max-w-md mx-auto bg-background-dark overflow-hidden shadow-2xl">
+<!-- Header -->
+<header class="shrink-0 pt-12 pb-2 px-6 bg-background-dark z-20 flex items-center justify-between sticky top-0">
+<div>
+<h1 class="text-3xl font-extrabold tracking-tight text-white">Categorías</h1>
+<p class="text-gray-400 text-sm font-medium">Gestión mensual</p>
+</div>
+<button class="flex items-center justify-center w-12 h-12 rounded-full bg-surface-dark border border-white/5 text-primary hover:bg-primary hover:text-background-dark transition-colors duration-200 shadow-lg">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+</header>
+<!-- Scrollable Content -->
+<main class="flex-1 overflow-y-auto no-scrollbar pb-24">
+<!-- Monthly Summary Card -->
+<div class="px-6 py-6">
+<div class="relative overflow-hidden rounded-3xl bg-surface-dark border border-white/5 p-6 shadow-xl">
+<!-- Background Decoration -->
+<div class="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col gap-6">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-gray-400 text-sm font-medium mb-1">Presupuesto Total</p>
+<h2 class="text-3xl font-bold text-white tracking-tight">$2,450.00</h2>
+</div>
+<div class="text-right">
+<div class="inline-flex items-center gap-1 bg-white/5 px-2 py-1 rounded-lg">
+<span class="material-symbols-outlined text-primary text-sm">trending_up</span>
+<span class="text-xs font-bold text-primary">+12%</span>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-medium">
+<span class="text-gray-300">Gastado: <span class="text-white font-bold">$1,420.00</span></span>
+<span class="text-primary">58%</span>
+</div>
+<div class="h-3 w-full bg-black/40 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 58%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Fixed Expenses Section -->
+<div class="px-6 mb-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold text-white tracking-tight">Gastos Fijos</h3>
+<span class="text-xs font-semibold text-gray-500 bg-surface-dark px-2 py-1 rounded-md">Recurrentes</span>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Item 1: Car (Paid) -->
+<div class="group bg-surface-dark hover:bg-surface-dark-lighter transition-colors rounded-2xl p-4 border border-white/5 shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-[#2a4232] text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">directions_car</span>
+</div>
+<div>
+<h4 class="font-bold text-white leading-tight">Coche</h4>
+<p class="text-xs text-gray-400">Mensual</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+<span class="text-[10px] font-bold text-primary mt-1">PAGADO</span>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-xs">
+<span class="text-gray-400">$150 / $150</span>
+<span class="text-white font-bold">100%</span>
+</div>
+<div class="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 100%"></div>
+</div>
+</div>
+</div>
+<!-- Item 2: Phone (Unpaid) -->
+<div class="group bg-surface-dark hover:bg-surface-dark-lighter transition-colors rounded-2xl p-4 border border-white/5 shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-gray-800 text-gray-400 flex items-center justify-center shrink-0 group-hover:bg-[#2a4232] group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">smartphone</span>
+</div>
+<div>
+<h4 class="font-bold text-white leading-tight">Móvil</h4>
+<p class="text-xs text-gray-400">Día 25</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+<span class="text-[10px] font-bold text-gray-500 mt-1">PENDIENTE</span>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-xs">
+<span class="text-gray-400">$0 / $50</span>
+<span class="text-white font-bold">0%</span>
+</div>
+<div class="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 0%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Variable Expenses Section -->
+<div class="px-6 mb-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold text-white tracking-tight">Gastos Variables</h3>
+<span class="text-xs font-semibold text-gray-500 bg-surface-dark px-2 py-1 rounded-md">Consumo</span>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Item 3: Course -->
+<div class="bg-surface-dark rounded-2xl p-4 border border-white/5 shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-[#2a4232] text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">school</span>
+</div>
+<div>
+<h4 class="font-bold text-white leading-tight">Curso Inglés</h4>
+<p class="text-xs text-gray-400">Educación</p>
+</div>
+</div>
+<div class="text-right">
+<span class="block text-lg font-bold text-white">$20</span>
+<span class="text-[10px] text-gray-400">de $100</span>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 20%"></div>
+</div>
+<p class="text-[10px] text-right text-primary font-bold">20% usado</p>
+</div>
+</div>
+<!-- Item 4: Groceries -->
+<div class="bg-surface-dark rounded-2xl p-4 border border-white/5 shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-orange-900/40 text-orange-400 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">shopping_cart</span>
+</div>
+<div>
+<h4 class="font-bold text-white leading-tight">Supermercado</h4>
+<p class="text-xs text-gray-400">Hogar</p>
+</div>
+</div>
+<div class="text-right">
+<span class="block text-lg font-bold text-white">$450</span>
+<span class="text-[10px] text-gray-400">de $600</span>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
+<div class="h-full bg-orange-500 rounded-full" style="width: 75%"></div>
+</div>
+<p class="text-[10px] text-right text-orange-500 font-bold">75% usado</p>
+</div>
+</div>
+<!-- Item 5: Entertainment -->
+<div class="bg-surface-dark rounded-2xl p-4 border border-white/5 shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-purple-900/40 text-purple-400 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">movie</span>
+</div>
+<div>
+<h4 class="font-bold text-white leading-tight">Ocio</h4>
+<p class="text-xs text-gray-400">Personal</p>
+</div>
+</div>
+<div class="text-right">
+<span class="block text-lg font-bold text-white">$120</span>
+<span class="text-[10px] text-gray-400">de $150</span>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
+<div class="h-full bg-purple-500 rounded-full" style="width: 80%"></div>
+</div>
+<p class="text-[10px] text-right text-purple-500 font-bold">80% usado</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Spacer -->
+<div class="h-8"></div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="shrink-0 bg-surface-dark border-t border-white/5 px-6 pb-8 pt-4 flex justify-between items-center z-20">
+<button class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+<span class="text-[10px] font-medium">Resumen</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined">category</span>
+<span class="text-[10px] font-bold">Categorías</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors group">
+<div class="relative">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+</div>
+<span class="text-[10px] font-medium">Alertas</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">person</span>
+<span class="text-[10px] font-medium">Perfil</span>
+</button>
+</nav>
+</div>
+</body></html>

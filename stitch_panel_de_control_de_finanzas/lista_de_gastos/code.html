@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lista de Gastos</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-dark": "#1a3323", // Slightly lighter than bg-dark for cards
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem", 
+                        "lg": "0.75rem", 
+                        "xl": "1rem", 
+                        "2xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased selection:bg-primary selection:text-background-dark">
+<div class="relative mx-auto flex h-full min-h-screen w-full max-w-[430px] flex-col overflow-hidden bg-background-light dark:bg-background-dark shadow-2xl">
+<!-- Top Status Bar Area (simulated) -->
+<div class="h-12 w-full shrink-0 bg-transparent"></div>
+<!-- Header / Top App Bar -->
+<header class="flex items-center justify-between px-5 pb-2 pt-2">
+<button class="flex h-10 w-10 items-center justify-center rounded-full bg-transparent text-gray-800 hover:bg-black/5 dark:text-white dark:hover:bg-white/10">
+<span class="material-symbols-outlined text-[28px]">menu</span>
+</button>
+<h2 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white">Lista de gastos</h2>
+<button class="flex h-10 w-10 items-center justify-center rounded-full bg-transparent text-gray-800 hover:bg-black/5 dark:text-white dark:hover:bg-white/10">
+<span class="material-symbols-outlined text-[24px]">calendar_month</span>
+</button>
+</header>
+<!-- Total Balance Section -->
+<section class="flex flex-col items-center justify-center px-4 py-6">
+<p class="mb-1 text-sm font-medium text-gray-500 dark:text-[#92c9a4]">Total en Octubre</p>
+<h1 class="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">$1,250.00</h1>
+<div class="mt-4 flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 dark:bg-primary/20">
+<span class="material-symbols-outlined text-[16px] text-green-700 dark:text-primary">trending_up</span>
+<span class="text-xs font-bold text-green-700 dark:text-primary">+12% vs mes anterior</span>
+</div>
+</section>
+<!-- Quick Actions & Filters -->
+<section class="flex w-full flex-col gap-4">
+<!-- Filter Chips -->
+<div class="no-scrollbar flex w-full gap-3 overflow-x-auto px-5 pb-2">
+<button class="flex h-9 shrink-0 items-center justify-center rounded-full bg-primary px-5 text-sm font-bold text-background-dark shadow-sm shadow-primary/30 transition-transform active:scale-95">
+                    Hoy
+                </button>
+<button class="flex h-9 shrink-0 items-center justify-center rounded-full bg-white px-5 text-sm font-medium text-gray-600 shadow-sm hover:bg-gray-50 dark:bg-surface-dark dark:text-gray-300 dark:hover:bg-white/5 active:scale-95 transition-colors border border-gray-100 dark:border-white/5">
+                    Esta semana
+                </button>
+<button class="flex h-9 shrink-0 items-center justify-center rounded-full bg-white px-5 text-sm font-medium text-gray-600 shadow-sm hover:bg-gray-50 dark:bg-surface-dark dark:text-gray-300 dark:hover:bg-white/5 active:scale-95 transition-colors border border-gray-100 dark:border-white/5">
+                    Comida
+                </button>
+<button class="flex h-9 shrink-0 items-center justify-center rounded-full bg-white px-5 text-sm font-medium text-gray-600 shadow-sm hover:bg-gray-50 dark:bg-surface-dark dark:text-gray-300 dark:hover:bg-white/5 active:scale-95 transition-colors border border-gray-100 dark:border-white/5">
+                    Transporte
+                </button>
+<button class="flex h-9 shrink-0 items-center justify-center rounded-full bg-white px-5 text-sm font-medium text-gray-600 shadow-sm hover:bg-gray-50 dark:bg-surface-dark dark:text-gray-300 dark:hover:bg-white/5 active:scale-95 transition-colors border border-gray-100 dark:border-white/5">
+                    Ocio
+                </button>
+</div>
+</section>
+<!-- Main Content: Expense List -->
+<div class="mt-2 flex-1 overflow-y-auto rounded-t-3xl bg-white px-5 pt-6 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] dark:bg-surface-dark/50 dark:shadow-none">
+<div class="mb-4 flex items-center justify-between">
+<h3 class="text-base font-bold text-gray-900 dark:text-white">Transacciones recientes</h3>
+<button class="text-xs font-semibold text-primary hover:text-primary/80">Ver todo</button>
+</div>
+<div class="flex flex-col gap-3 pb-24">
+<!-- Item 1 -->
+<div class="group flex items-center justify-between rounded-xl bg-gray-50 p-3 transition-colors hover:bg-gray-100 dark:bg-surface-dark dark:hover:bg-white/5">
+<div class="flex items-center gap-4">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-orange-100 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400">
+<span class="material-symbols-outlined">shopping_cart</span>
+</div>
+<div class="flex flex-col">
+<p class="line-clamp-1 text-base font-bold text-gray-900 dark:text-white">Supermercado</p>
+<p class="line-clamp-1 text-xs font-medium text-gray-500 dark:text-gray-400">Hoy, 10:30 AM</p>
+</div>
+</div>
+<p class="text-base font-bold text-gray-900 dark:text-white">-$45.00</p>
+</div>
+<!-- Item 2 -->
+<div class="group flex items-center justify-between rounded-xl bg-gray-50 p-3 transition-colors hover:bg-gray-100 dark:bg-surface-dark dark:hover:bg-white/5">
+<div class="flex items-center gap-4">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
+<span class="material-symbols-outlined">local_gas_station</span>
+</div>
+<div class="flex flex-col">
+<p class="line-clamp-1 text-base font-bold text-gray-900 dark:text-white">Gasolina</p>
+<p class="line-clamp-1 text-xs font-medium text-gray-500 dark:text-gray-400">Ayer, 6:15 PM</p>
+</div>
+</div>
+<p class="text-base font-bold text-gray-900 dark:text-white">-$20.00</p>
+</div>
+<!-- Item 3 -->
+<div class="group flex items-center justify-between rounded-xl bg-gray-50 p-3 transition-colors hover:bg-gray-100 dark:bg-surface-dark dark:hover:bg-white/5">
+<div class="flex items-center gap-4">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-purple-100 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<div class="flex flex-col">
+<p class="line-clamp-1 text-base font-bold text-gray-900 dark:text-white">Cena con amigos</p>
+<p class="line-clamp-1 text-xs font-medium text-gray-500 dark:text-gray-400">12 Oct, 9:00 PM</p>
+</div>
+</div>
+<p class="text-base font-bold text-gray-900 dark:text-white">-$85.50</p>
+</div>
+<!-- Item 4 -->
+<div class="group flex items-center justify-between rounded-xl bg-gray-50 p-3 transition-colors hover:bg-gray-100 dark:bg-surface-dark dark:hover:bg-white/5">
+<div class="flex items-center gap-4">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-pink-100 text-pink-600 dark:bg-pink-500/20 dark:text-pink-400">
+<span class="material-symbols-outlined">movie</span>
+</div>
+<div class="flex flex-col">
+<p class="line-clamp-1 text-base font-bold text-gray-900 dark:text-white">Cine: Estreno</p>
+<p class="line-clamp-1 text-xs font-medium text-gray-500 dark:text-gray-400">10 Oct, 7:30 PM</p>
+</div>
+</div>
+<p class="text-base font-bold text-gray-900 dark:text-white">-$30.00</p>
+</div>
+<!-- Item 5 -->
+<div class="group flex items-center justify-between rounded-xl bg-gray-50 p-3 transition-colors hover:bg-gray-100 dark:bg-surface-dark dark:hover:bg-white/5">
+<div class="flex items-center gap-4">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-teal-100 text-teal-600 dark:bg-teal-500/20 dark:text-teal-400">
+<span class="material-symbols-outlined">checkroom</span>
+</div>
+<div class="flex flex-col">
+<p class="line-clamp-1 text-base font-bold text-gray-900 dark:text-white">Ropa Nueva</p>
+<p class="line-clamp-1 text-xs font-medium text-gray-500 dark:text-gray-400">08 Oct, 4:15 PM</p>
+</div>
+</div>
+<p class="text-base font-bold text-gray-900 dark:text-white">-$120.00</p>
+</div>
+</div>
+</div>
+<!-- Floating Action Button (FAB) -->
+<div class="absolute bottom-24 right-5 z-20">
+<button class="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-background-dark shadow-[0_8px_20px_rgba(19,236,91,0.4)] transition-transform hover:scale-105 active:scale-95">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+</div>
+<!-- Bottom Navigation -->
+<nav class="absolute bottom-0 z-10 w-full border-t border-gray-100 bg-white/80 px-6 pb-8 pt-4 backdrop-blur-md dark:border-white/5 dark:bg-[#102216]/80">
+<div class="flex items-center justify-between">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined filled">home</span>
+<span class="text-[10px] font-bold">Inicio</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="text-[10px] font-medium">Stats</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="text-[10px] font-medium">Cartera</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Perfil</span>
+</button>
+</div>
+</nav>
+<!-- Gradient Overlay for Bottom List Fade -->
+<div class="pointer-events-none absolute bottom-24 left-0 h-12 w-full bg-gradient-to-t from-white to-transparent dark:from-background-dark dark:to-transparent"></div>
+</div>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</body></html>

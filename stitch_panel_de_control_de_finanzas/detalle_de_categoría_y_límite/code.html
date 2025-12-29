@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Supermercado - Detalle de Categoría</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-dark": "#1a2c20",
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased selection:bg-primary selection:text-black">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden pb-24">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-50 flex items-center justify-between bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 pt-12">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-white">arrow_back_ios_new</span>
+</button>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Supermercado</h2>
+<button class="flex h-10 items-center justify-end px-2">
+<p class="text-primary text-base font-bold leading-normal tracking-[0.015em]">Editar</p>
+</button>
+</div>
+<!-- Hero Section: Budget Status -->
+<div class="flex flex-col items-center px-6 pt-4 pb-8">
+<!-- Icon/Logo of Category -->
+<div class="mb-4 flex size-16 items-center justify-center rounded-full bg-surface-light dark:bg-surface-dark shadow-sm">
+<span class="material-symbols-outlined text-4xl text-primary">shopping_cart</span>
+</div>
+<!-- Big Number -->
+<h1 class="text-[42px] font-extrabold leading-tight tracking-tight text-slate-900 dark:text-white">
+                $150.00
+            </h1>
+<p class="text-slate-500 dark:text-[#92c9a4] text-base font-medium mt-1">Disponible</p>
+<!-- Progress Bar Card -->
+<div class="mt-8 w-full rounded-3xl bg-surface-light dark:bg-surface-dark p-6 shadow-sm ring-1 ring-black/5 dark:ring-white/5">
+<div class="flex flex-col gap-3">
+<div class="flex gap-6 justify-between items-end">
+<div class="flex flex-col">
+<span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Gastado</span>
+<p class="text-slate-900 dark:text-white text-xl font-bold leading-normal">$450.00</p>
+</div>
+<p class="text-primary text-lg font-bold leading-normal">75%</p>
+</div>
+<!-- Progress Track -->
+<div class="h-3 w-full rounded-full bg-slate-100 dark:bg-[#326744]/50 overflow-hidden">
+<div class="h-full rounded-full bg-primary shadow-[0_0_10px_rgba(19,236,91,0.5)] transition-all duration-1000 ease-out" style="width: 75%;"></div>
+</div>
+<div class="flex justify-between items-center mt-1">
+<p class="text-slate-400 dark:text-[#92c9a4] text-sm font-medium">Límite Mensual: $600.00</p>
+<!-- Status Chip -->
+<div class="flex items-center gap-1 rounded-full bg-primary/20 px-3 py-1">
+<span class="material-symbols-outlined text-primary text-[16px]">check_circle</span>
+<span class="text-primary text-xs font-bold">En orden</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Transactions List -->
+<div class="flex-1 rounded-t-[2.5rem] bg-surface-light dark:bg-[#0c1a11] border-t border-black/5 dark:border-white/5 p-6 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] dark:shadow-none">
+<div class="mb-6 flex items-center justify-between">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Movimientos recientes</h3>
+<button class="text-sm font-medium text-primary">Ver todos</button>
+</div>
+<div class="space-y-4">
+<!-- Date Header -->
+<p class="text-xs font-bold uppercase tracking-wider text-slate-400">Hoy</p>
+<!-- Transaction Item 1 -->
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-slate-100 dark:bg-surface-dark text-slate-900 dark:text-white group-hover:bg-primary/20 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">storefront</span>
+</div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white text-base">Walmart Supercenter</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Comestibles</p>
+</div>
+</div>
+<p class="font-bold text-slate-900 dark:text-white text-base">-$45.20</p>
+</div>
+<!-- Transaction Item 2 -->
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-slate-100 dark:bg-surface-dark text-slate-900 dark:text-white group-hover:bg-primary/20 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">local_cafe</span>
+</div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white text-base">Starbucks Coffee</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Bebidas y Snacks</p>
+</div>
+</div>
+<p class="font-bold text-slate-900 dark:text-white text-base">-$8.50</p>
+</div>
+<!-- Spacer -->
+<div class="h-2"></div>
+<!-- Date Header -->
+<p class="text-xs font-bold uppercase tracking-wider text-slate-400">Ayer</p>
+<!-- Transaction Item 3 -->
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-slate-100 dark:bg-surface-dark text-slate-900 dark:text-white group-hover:bg-primary/20 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">shopping_bag</span>
+</div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white text-base">Costco Wholesale</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Hogar</p>
+</div>
+</div>
+<p class="font-bold text-slate-900 dark:text-white text-base">-$120.00</p>
+</div>
+<!-- Transaction Item 4 -->
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-slate-100 dark:bg-surface-dark text-slate-900 dark:text-white group-hover:bg-primary/20 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">local_taxi</span>
+</div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white text-base">Uber Trip</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Transporte (Extra)</p>
+</div>
+</div>
+<p class="font-bold text-slate-900 dark:text-white text-base">-$15.40</p>
+</div>
+</div>
+</div>
+<!-- Sticky Bottom Action -->
+<div class="fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-background-light via-background-light to-transparent dark:from-background-dark dark:via-background-dark dark:to-transparent px-6 pb-8 pt-8">
+<button class="group relative flex w-full items-center justify-center gap-3 rounded-2xl bg-primary px-6 py-4 text-black shadow-lg shadow-primary/20 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-2xl font-bold">add</span>
+<span class="text-lg font-bold">Agregar Gasto</span>
+</button>
+</div>
+</div>
+</body></html>
