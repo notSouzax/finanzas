@@ -120,7 +120,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 16px 8px;
+    padding: 12px 16px 12px;
     background: var(--bg-dark);
     position: sticky;
     top: 0;
@@ -775,7 +775,8 @@ body {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-top: 1px solid var(--border);
-    padding: 8px 8px 0px;
+    padding: 12px 8px;
+    padding-bottom: calc(12px + var(--safe-bottom));
     display: flex;
     justify-content: space-evenly;
     align-items: center;
